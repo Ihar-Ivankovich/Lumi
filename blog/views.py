@@ -1,10 +1,8 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.urls import reverse
-from django.urls import reverse_lazy
-from django.views import View
 from django.db.models import Case, IntegerField
 from django.db.models import Count
 from django.db.models import When
@@ -18,7 +16,7 @@ from django.views.generic import (
 
 from blog.forms import CommentForm, ReactionForm
 from django_project.settings import PAGE_NUMBER
-from .models import Post, Comment, RecipeReaction
+from .models import Post, Comment
 
 
 def home(request):
@@ -30,7 +28,7 @@ def home(request):
 
 class PostListView(ListView):
     model = Post
-    template_name = 'blog/home.html'  # <app>/<model>_<viewtype>.html
+    template_name = 'blog/home.html'
     context_object_name = 'posts'
     ordering = ['-date_posted']
     paginate_by = PAGE_NUMBER
@@ -169,7 +167,6 @@ def addcomment(request, article_id):
             comment = form.save(commit=False)
             comment.author = request.user
             comment.recipe_id = article_id
-            # comment.text = Post.objects.get(id=article_id)
             form.save()
     return HttpResponseRedirect('/post/%s/' % article_id)
 
@@ -186,5 +183,3 @@ class ReactionView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return self.request.META.get('HTTP_REFERER') or reverse('blog-home')
 
-def about(request):
-    return render(request, 'blog/about.html', {'title': 'About'})

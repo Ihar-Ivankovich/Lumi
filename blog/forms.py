@@ -8,6 +8,7 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ('text',)
 
+
 class ReactionForm(forms.Form):
     recipe_id = forms.IntegerField()
     reaction = forms.CharField()

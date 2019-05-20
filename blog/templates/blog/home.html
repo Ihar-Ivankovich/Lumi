@@ -12,7 +12,7 @@
                 <p class="article-content">{{ post.content }}</p>
 
                 <div class="card-body form-inline">
-            {% if request.path != '/user/admin' %}
+            {% if not request.user.is_authenticated %}
                 <form method="post" action="{% url 'reaction' %} " class="form-inline  " style="margin-right: 6px" >
                     {% csrf_token %}
                     <input type="hidden" name="recipe_id" value="{{ post.id }}">
